@@ -301,7 +301,7 @@ class SelectWordButtonsAreaWidget extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           mainAxisSpacing: 20,
           crossAxisSpacing: 20,
-          padding: const EdgeInsets.all(50.0),
+          padding: const EdgeInsets.all(30.0),
           childAspectRatio: 2.5,
           crossAxisCount: 2,
           scrollDirection: Axis.vertical,
@@ -355,7 +355,7 @@ class SelectWordButtonWidget extends StatelessWidget {
     }
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        textStyle: const TextStyle(fontSize: 14),
+        textStyle: const TextStyle(fontSize: 20),
         foregroundColor: Theme.of(context).backgroundColor,
         backgroundColor: Theme.of(context).primaryColor,
       ),
@@ -373,7 +373,6 @@ class SelectWordResultAreaWidget extends StatelessWidget {
       {super.key, required this.totalIndex, required this.correctCount});
   @override
   Widget build(BuildContext context) {
-  print('結果表示 SelectWordResultAreaWidget in ');
     var imageStr;
     if (correctCount == totalIndex) {
       imageStr = 'images/finish.png';

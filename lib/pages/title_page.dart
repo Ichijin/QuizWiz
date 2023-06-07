@@ -135,7 +135,7 @@ class TitleButtonAreaWidget extends StatelessWidget {
         const SizedBox(height: 20),
         // STARTボタン
         SizedBox(
-          width: 120,
+          width: 200,
           height: 60,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
