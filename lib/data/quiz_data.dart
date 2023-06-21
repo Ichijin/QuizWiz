@@ -3,12 +3,13 @@ import 'package:http/http.dart' as http;
 import '../settings/googleapi_settings.dart';
 /// クイズデータ
 class QuizData {
-  QuizData({required this.questionNum, required this.question, required this.answer1, required this.answer2, required this.collect});
+  QuizData({required this.questionNum, required this.question, required this.answer1, required this.answer2, required this.collect, required this.comment});
   final String questionNum; // 設問
   final String question; // 問題
   final String answer1; // 解答１
   final String answer2; // 解答２
   final String collect; // 正解
+  final String comment; // 解説
 }
 /// クイズデータリポジトリ
 class QuizDataRepository {
@@ -31,7 +32,7 @@ class QuizDataRepository {
       final List<dynamic> values = message['values'];
       values.forEach((value) => {
             result.add(
-                QuizData(questionNum: value[0], question: value[1], answer1: value[2], answer2: value[3], collect: value[4]))
+                QuizData(questionNum: value[0], question: value[1], answer1: value[2], answer2: value[3], collect: value[4], comment: value[5]))
           });
     } catch (e) {
       print(e); // エラーはログに出力して握りつぶす

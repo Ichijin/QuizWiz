@@ -38,6 +38,7 @@ class _SelectWordPageState extends State<SelectWordPage> {
   var ansBool;
   var trueCorrect;
   var ansCorrect;
+  var ansComment;
   // 選択単語数
   //static const int selectWordCount = 2;
   /// 単語ボタン押下処理
@@ -45,10 +46,11 @@ class _SelectWordPageState extends State<SelectWordPage> {
     // 答え合わせ
     setState(() {
       ansCorrect = selectWord;
+      ansComment = _questionWordData?.comment;
       if (_questionWordData?.collect == '1') {
         isCorrect = selectWord == _questionWordData?.answer1;
         trueCorrect = _questionWordData?.answer1;
-      } else {
+      } else if (_questionWordData?.collect == '2') {
         isCorrect = selectWord == _questionWordData?.answer2;
         trueCorrect = _questionWordData?.answer2;
       }
@@ -66,6 +68,7 @@ class _SelectWordPageState extends State<SelectWordPage> {
   void onPressedNextButton() {
     setState(() {
       // 最後まで問題を出したら結果表示
+      ansBool = ''; // 結果の初期化
       _questionIndex++;
       if (_quizDataList.length < _questionIndex) {
         _questionDisplayState = QuestionDisplayState.result;
@@ -106,6 +109,7 @@ class _SelectWordPageState extends State<SelectWordPage> {
           question: _questionWordData?.question ?? 'empty',
           answer: ansBool.toString(),
           trueAnswer: trueCorrect.toString(),
+          ansComment: ansComment.toString(),
           index: _questionIndex + 1,
           totalIndex: _quizDataList.length,
           questionDisplayState: _questionDisplayState,
@@ -138,7 +142,7 @@ class _SelectWordPageState extends State<SelectWordPage> {
     createQuestion(_questionIndex);
   }
   /// 問題の生成
-   void createQuestion(int index) {
+  void createQuestion(int index) {
     if (index >= _quizDataList.length) {
       _questionDisplayState = QuestionDisplayState.result;
       return;
@@ -178,6 +182,7 @@ class SelectWordQuestionAreaWidget extends StatelessWidget {
   final String question;
   final String answer;
   final String trueAnswer;
+  final String ansComment;
   final int index;
   final int totalIndex;
   final QuestionDisplayState questionDisplayState;
@@ -186,16 +191,21 @@ class SelectWordQuestionAreaWidget extends StatelessWidget {
       required this.question,
       required this.answer,
       required this.trueAnswer,
+      required this.ansComment,
       required this.index,
       required this.totalIndex,
       required this.questionDisplayState});
   @override
   Widget build(BuildContext context) {
     var ansString = '';
+    var strComment = '';
     if (answer == 'ok') {
       ansString = '正解！';
     } else if (answer == 'ng') {
-      ansString = '不正解です。正解は、${trueAnswer} です。';
+      ansString = '不正解です！'; // 正解は、${trueAnswer} です。';
+    }
+    if (answer == 'ok' || answer == 'ng') {
+      strComment = ansComment;
     }
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -216,7 +226,7 @@ class SelectWordQuestionAreaWidget extends StatelessWidget {
             children: [
               const SizedBox(height: 8),
               Container(
-                padding: EdgeInsets.all(20),
+                padding: EdgeInsets.all(10),
                 child: Text(
                   question,
                   style: const TextStyle(
@@ -225,7 +235,23 @@ class SelectWordQuestionAreaWidget extends StatelessWidget {
                 ),
               ),
               Container(
-                child: Text(ansString),
+                padding: EdgeInsets.all(8),
+                child: Text(
+                  ansString,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    color: Colors.orangeAccent
+                  ),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.all(8),
+                child: Text(
+                  strComment,
+                  style: const TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
               ),
             ],
           ),
@@ -301,7 +327,7 @@ class SelectWordButtonsAreaWidget extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           mainAxisSpacing: 20,
           crossAxisSpacing: 20,
-          padding: const EdgeInsets.all(30.0),
+          padding: const EdgeInsets.all(20.0),
           childAspectRatio: 2.5,
           crossAxisCount: 2,
           scrollDirection: Axis.vertical,
